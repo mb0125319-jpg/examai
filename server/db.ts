@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users } from "../drizzle/schema";
+import { InsertUser, users, subscriptions, notes, summaries, quizzes, quizResponses, flashcards, weaknessAnalysis, studyPlans, examPredictions } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -89,4 +89,131 @@ export async function getUserByOpenId(openId: string) {
   return result.length > 0 ? result[0] : undefined;
 }
 
-// TODO: add feature queries here as your schema grows.
+/**
+ * Subscription queries
+ */
+export async function getOrCreateSubscription(userId: number) {
+  const db = await getDb();
+  if (!db) return null;
+
+  const existing = await db.select().from(subscriptions).where(eq(subscriptions.userId, userId)).limit(1);
+  
+  if (existing.length > 0) {
+    return existing[0];
+  }
+
+  // Create default free subscription
+  await db.insert(subscriptions).values({
+    userId,
+    tier: "free",
+    billingCycle: "none",
+  });
+
+  const result = await db.select().from(subscriptions).where(eq(subscriptions.userId, userId)).limit(1);
+  return result[0] || null;
+}
+
+export async function getUserSubscription(userId: number) {
+  const db = await getDb();
+  if (!db) return null;
+
+  const result = await db.select().from(subscriptions).where(eq(subscriptions.userId, userId)).limit(1);
+  return result[0] || null;
+}
+
+/**
+ * Notes queries
+ */
+export async function getUserNotes(userId: number) {
+  const db = await getDb();
+  if (!db) return [];
+
+  return db.select().from(notes).where(eq(notes.userId, userId));
+}
+
+export async function getNoteById(noteId: number) {
+  const db = await getDb();
+  if (!db) return null;
+
+  const result = await db.select().from(notes).where(eq(notes.id, noteId)).limit(1);
+  return result[0] || null;
+}
+
+/**
+ * Summaries queries
+ */
+export async function getSummaryByNoteId(noteId: number) {
+  const db = await getDb();
+  if (!db) return null;
+
+  const result = await db.select().from(summaries).where(eq(summaries.noteId, noteId)).limit(1);
+  return result[0] || null;
+}
+
+/**
+ * Quizzes queries
+ */
+export async function getUserQuizzes(userId: number) {
+  const db = await getDb();
+  if (!db) return [];
+
+  return db.select().from(quizzes).where(eq(quizzes.userId, userId));
+}
+
+export async function getQuizById(quizId: number) {
+  const db = await getDb();
+  if (!db) return null;
+
+  const result = await db.select().from(quizzes).where(eq(quizzes.id, quizId)).limit(1);
+  return result[0] || null;
+}
+
+/**
+ * Quiz responses queries
+ */
+export async function getUserQuizResponses(userId: number) {
+  const db = await getDb();
+  if (!db) return [];
+
+  return db.select().from(quizResponses).where(eq(quizResponses.userId, userId));
+}
+
+/**
+ * Flashcards queries
+ */
+export async function getUserFlashcards(userId: number) {
+  const db = await getDb();
+  if (!db) return [];
+
+  return db.select().from(flashcards).where(eq(flashcards.userId, userId));
+}
+
+/**
+ * Weakness analysis queries
+ */
+export async function getUserWeaknessAnalysis(userId: number) {
+  const db = await getDb();
+  if (!db) return [];
+
+  return db.select().from(weaknessAnalysis).where(eq(weaknessAnalysis.userId, userId));
+}
+
+/**
+ * Study plans queries
+ */
+export async function getUserStudyPlans(userId: number) {
+  const db = await getDb();
+  if (!db) return [];
+
+  return db.select().from(studyPlans).where(eq(studyPlans.userId, userId));
+}
+
+/**
+ * Exam predictions queries
+ */
+export async function getUserExamPredictions(userId: number) {
+  const db = await getDb();
+  if (!db) return [];
+
+  return db.select().from(examPredictions).where(eq(examPredictions.userId, userId));
+}
