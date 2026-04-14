@@ -1,11 +1,16 @@
 {
   "buildCommand": "pnpm build",
-  "outputDirectory": "dist/client",
+  "outputDirectory": "dist",
   "installCommand": "pnpm install",
-  "framework": "vite",
-  "functions": {
-    "api/**/*.ts": {
-      "runtime": "nodejs18.x"
+  "framework": null,
+  "rewrites": [
+    {
+      "source": "/api/trpc/:path*",
+      "destination": "/api/trpc"
+    },
+    {
+      "source": "/:path*",
+      "destination": "/index.html"
     }
-  }
+  ]
 }

@@ -1,16 +1,12 @@
 import { VercelRequest, VercelResponse } from "@vercel/node";
-import { createExpressMiddleware } from "@trpc/server/adapters/express";
-import express from "express";
 import { appRouter } from "../server/routers";
+import { createHTTPHandler } from "@trpc/server/adapters/standalone";
 
-const app = express();
+const handler = createHTTPHandler({
+  router: appRouter,
+  createContext: () => ({}),
+});
 
-app.use(
-  "/api/trpc",
-  createExpressMiddleware({
-    router: appRouter,
-    createContext: async () => ({}),
-  })
-);
-
-export default app;
+export default async (req: VercelRequest, res: VercelResponse) => {
+  return handler(req as any, res as any);
+};
