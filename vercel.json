@@ -4,17 +4,17 @@
   "installCommand": "pnpm install",
   "framework": "vite",
   "outputDirectory": "dist",
-  "env": [
-    "DATABASE_URL",
-    "JWT_SECRET",
-    "VITE_APP_ID",
-    "OAUTH_SERVER_URL",
-    "VITE_OAUTH_PORTAL_URL",
-    "OWNER_OPEN_ID",
-    "OWNER_NAME",
-    "BUILT_IN_FORGE_API_URL",
-    "BUILT_IN_FORGE_API_KEY",
-    "VITE_FRONTEND_FORGE_API_KEY",
-    "VITE_FRONTEND_FORGE_API_URL"
-  ]
+  "env": {
+    "DATABASE_URL": {"description": "MySQL database connection string"},
+    "JWT_SECRET": {"description": "Secret key for JWT signing"},
+    "VITE_APP_ID": {"description": "Manus OAuth App ID"},
+    "OAUTH_SERVER_URL": {"description": "Manus OAuth Server URL"},
+    "VITE_OAUTH_PORTAL_URL": {"description": "Manus OAuth Portal URL"},
+    "OWNER_OPEN_ID": {"description": "Owner's Manus Open ID"},
+    "OWNER_NAME": {"description": "Owner's name"},
+    "BUILT_IN_FORGE_API_URL": {"description": "Manus Forge API URL"},
+    "BUILT_IN_FORGE_API_KEY": {"description": "Manus Forge API Key"},
+    "VITE_FRONTEND_FORGE_API_KEY": {"description": "Frontend Forge API Key"},
+    "VITE_FRONTEND_FORGE_API_URL": {"description": "Frontend Forge API URL"}
+  }
 }
